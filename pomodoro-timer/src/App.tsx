@@ -2,61 +2,56 @@ import { useState, useEffect } from "react";
 import "./index.css";
 
 export default function App() {
-	// --- 1. STATE VARIABLES (The app's "Memory") ---
+	// --- 1. STATE WITH TYPES ---
 
-	// 'work' = 25 mins, 'break' = 5 mins
-	const [mode, setMode] = useState("work");
+	// We specify that mode can ONLY be 'work' or 'break'
+	const [mode, setMode] = useState<"work" | "break">("work");
 
-	// Timer is in seconds. 25 mins * 60 = 1500 seconds
-	const [timeLeft, setTimeLeft] = useState(25 * 60);
+	// Time is a number
+	const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
 
-	// Is the timer currently ticking?
-	const [isRunning, setIsRunning] = useState(false);
+	// isRunning is a boolean (true/false)
+	const [isRunning, setIsRunning] = useState<boolean>(false);
 
-	// --- 2. THE TIMER LOGIC ---
+	// --- 2. TIMER LOGIC ---
 	useEffect(() => {
-		let interval: ReturnType<typeof setInterval> | undefined;
+		// We define the type for the interval ID
+		let interval: ReturnType<typeof setInterval>;
 
 		if (isRunning && timeLeft > 0) {
-			// If running, subtract 1 second every 1000 milliseconds
 			interval = setInterval(() => {
 				setTimeLeft((prevTime) => prevTime - 1);
 			}, 1000);
 		} else if (timeLeft === 0) {
-			// If time hits 0, stop the timer and play an alert
 			setIsRunning(false);
-			alert("Time is up! Take a break or get back to work.");
+			alert("Time is up!");
 		}
 
-		// Cleanup function (stops weird glitches when timer stops)
+		// Cleanup function
 		return () => clearInterval(interval);
-	}, [isRunning, timeLeft]); // Run this logic whenever isRunning or timeLeft changes
+	}, [isRunning, timeLeft]);
 
 	// --- 3. HELPER FUNCTIONS ---
 
-	// Convert seconds (e.g., 90) into MM:SS format (01:30)
-	const formatTime = (seconds: number) => {
+	// 'seconds' must be a number
+	const formatTime = (seconds: number): string => {
 		const minutes = Math.floor(seconds / 60);
 		const secs = seconds % 60;
-		// Add a '0' in front if the number is less than 10
 		return `${minutes < 10 ? "0" : ""}${minutes}:${secs < 10 ? "0" : ""}${secs}`;
 	};
 
-	// Switch to Work Mode (25 mins)
 	const handleWorkMode = () => {
 		setMode("work");
 		setIsRunning(false);
 		setTimeLeft(25 * 60);
 	};
 
-	// Switch to Break Mode (5 mins)
 	const handleBreakMode = () => {
 		setMode("break");
 		setIsRunning(false);
 		setTimeLeft(5 * 60);
 	};
 
-	// Reset the timer based on current mode
 	const handleReset = () => {
 		setIsRunning(false);
 		if (mode === "work") {
@@ -66,7 +61,7 @@ export default function App() {
 		}
 	};
 
-	// --- 4. THE VISUALS (HTML) ---
+	// --- 4. THE VISUALS ---
 	return (
 		<div className="app-container">
 			<div className="timer-box">

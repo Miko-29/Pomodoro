@@ -86,8 +86,9 @@ export default function TimerDisplay({
                         {getModeLabel()}
                     </div>
 
-                    {/* Time - 54px, weight 300, letter-spacing -1px */}
+                    {/* Time - 54px, weight 300, letter-spacing -1px, Space Mono font */}
                     <div
+                        className="font-mono"
                         style={{
                             fontSize: '54px',
                             fontWeight: 300,

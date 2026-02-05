@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 
 interface SettingsProps {
     isOpen: boolean;
@@ -15,6 +15,7 @@ interface SettingsProps {
 
 export default function Settings({ isOpen, onClose, settings, onUpdate }: SettingsProps) {
     const [localSettings, setLocalSettings] = useState(settings);
+    const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
     if (!isOpen) return null;
 
@@ -27,111 +28,212 @@ export default function Settings({ isOpen, onClose, settings, onUpdate }: Settin
         onClose();
     };
 
-    const increment = (key: string) => {
-        const currentValue = localSettings[key as keyof typeof localSettings];
-        handleChange(key, currentValue + 1);
+    // Curated time options for better UX
+    const getTimeOptions = (type: string): number[] => {
+        switch (type) {
+            case 'focusTime':
+                return [15, 20, 25, 30, 45, 60]; // Common focus durations
+            case 'shortBreakTime':
+                return [3, 5, 10, 15]; // Short break options
+            case 'longBreakTime':
+                return [10, 15, 20, 25, 30]; // Long break options
+            case 'longBreakInterval':
+                return [2, 3, 4, 5, 6]; // Sections/intervals
+            default:
+                return [];
+        }
     };
 
-    const decrement = (key: string) => {
-        const currentValue = localSettings[key as keyof typeof localSettings];
-        if (currentValue > 1) {
-            handleChange(key, currentValue - 1);
-        }
+    const renderScrollablePicker = (key: string, currentValue: number, label: string) => {
+        const values = getTimeOptions(key);
+
+        return (
+            <div className="mt-3 mb-4">
+                <div className="relative">
+                    {/* Scrollable dropdown */}
+                    <div
+                        className="max-h-48 overflow-y-auto rounded-2xl p-2 custom-scrollbar"
+                        style={{
+                            background: 'rgba(0, 0, 0, 0.3)',
+                            backdropFilter: 'blur(10px)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)'
+                        }}
+                    >
+                        {values.map((val) => (
+                            <div
+                                key={val}
+                                onClick={() => {
+                                    handleChange(key, val);
+                                    setExpandedRow(null);
+                                }}
+                                className="cursor-pointer px-4 py-3 rounded-xl transition-all duration-200"
+                                style={{
+                                    background: val === currentValue ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    color: '#ffffff',
+                                    fontSize: '1rem',
+                                    fontWeight: val === currentValue ? 600 : 400
+                                }}
+                            >
+                                {val} {label}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm"
-            style={{ background: 'rgba(0, 0, 0, 0.5)' }}
+            className="fixed inset-0 z-50 flex items-center justify-center animate-fade-in"
+            style={{
+                background: 'rgba(0, 0, 0, 0.7)',
+                backdropFilter: 'blur(8px)'
+            }}
             onClick={onClose}
         >
+            {/* Glassmorphic Modal Card */}
             <div
-                className="w-full max-w-[300px] rounded-[2rem] p-8 shadow-2xl animate-fade-in mx-4"
+                className="relative flex flex-col w-full max-w-md mx-4 animate-fade-in"
                 style={{
-                    background: 'linear-gradient(180deg, rgba(220, 220, 225, 0.95) 0%, rgba(200, 200, 210, 0.95) 100%)',
-                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(40px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+                    borderRadius: '32px',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                    padding: '32px 28px',
+                    height: '85vh',
+                    overflow: 'hidden'
                 }}
                 onClick={(e) => e.stopPropagation()}
             >
-
                 {/* Header */}
-                <div className="flex justify-center items-center mb-8 relative">
+                <div className="flex items-center justify-between mb-6">
+                    <h2
+                        className="text-white font-semibold text-2xl"
+                        style={{ letterSpacing: '-0.5px' }}
+                    >
+                        Settings
+                    </h2>
                     <button
                         onClick={onClose}
-                        className="absolute left-0 text-gray-400 hover:text-gray-600 text-2xl font-light"
+                        className="flex items-center justify-center w-10 h-10 rounded-full transition-all hover:bg-white/10"
                     >
-                        ‹
+                        <X size={24} strokeWidth={2} color="rgba(255, 255, 255, 0.8)" />
                     </button>
-                    <h2 className="text-gray-500 font-semibold text-base" style={{ letterSpacing: '0.02em' }}>
-                        Edit Duration
-                    </h2>
                 </div>
 
-                {/* Time Displays */}
-                <div className="space-y-5 mb-8">
-                    <div className="text-center text-gray-400 text-xl font-light">
-                        {localSettings.focusTime} min
-                    </div>
-                    <div className="text-center text-gray-400 text-xl font-light">
-                        {localSettings.shortBreakTime} min
-                    </div>
-                    <div className="text-center text-gray-400 text-xl font-light">
-                        {localSettings.longBreakTime} min
-                    </div>
-                </div>
-
-                {/* Intervals Control */}
-                <div className="flex items-center justify-between mb-6 text-gray-400">
-                    <span className="text-base font-light">{localSettings.longBreakInterval} intervals</span>
-                    <div className="flex flex-col">
-                        <button
-                            onClick={() => increment('longBreakInterval')}
-                            className="text-gray-400 hover:text-gray-600 -mb-1"
-                        >
-                            <ChevronUp size={20} strokeWidth={2} />
-                        </button>
-                        <button
-                            onClick={() => decrement('longBreakInterval')}
-                            className="text-gray-400 hover:text-gray-600"
-                        >
-                            <ChevronDown size={20} strokeWidth={2} />
-                        </button>
-                    </div>
-                </div>
-
-                {/* Slider */}
-                <div className="mb-8">
-                    <div className="relative h-1.5 bg-gray-300 rounded-full overflow-hidden mb-4">
+                {/* Scrollable Content */}
+                <div className="flex-grow overflow-y-auto pr-2 custom-scrollbar">
+                    {/* Focus Time */}
+                    <div className="mb-2">
                         <div
-                            className="absolute left-0 top-0 h-full bg-blue-400 transition-all duration-200 rounded-full"
-                            style={{ width: `${(localSettings.longBreakInterval / 10) * 100}%` }}
-                        />
-                        <input
-                            type="range"
-                            min="1"
-                            max="10"
-                            value={localSettings.longBreakInterval}
-                            onChange={(e) => handleChange('longBreakInterval', Number(e.target.value))}
-                            className="absolute inset-0 w-full opacity-0 cursor-pointer"
-                        />
+                            className="flex justify-between items-center py-4 px-4 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-white/5"
+                            onClick={() => setExpandedRow(expandedRow === 'focusTime' ? null : 'focusTime')}
+                        >
+                            <span className="text-white/70 text-base">Focus Time</span>
+                            <div className="flex items-center gap-3">
+                                <span className="text-white font-medium text-base">
+                                    {localSettings.focusTime} min
+                                </span>
+                                <ChevronDown
+                                    size={18}
+                                    strokeWidth={2.5}
+                                    color="rgba(255, 255, 255, 0.6)"
+                                    className="transition-transform duration-200"
+                                    style={{ transform: expandedRow === 'focusTime' ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                                />
+                            </div>
+                        </div>
+                        {expandedRow === 'focusTime' && renderScrollablePicker('focusTime', localSettings.focusTime, 'min')}
                     </div>
-                    <div className="text-center text-blue-400 font-bold text-3xl">
-                        {localSettings.longBreakInterval}
+
+                    {/* Short Break */}
+                    <div className="mb-2">
+                        <div
+                            className="flex justify-between items-center py-4 px-4 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-white/5"
+                            onClick={() => setExpandedRow(expandedRow === 'shortBreakTime' ? null : 'shortBreakTime')}
+                        >
+                            <span className="text-white/70 text-base">Short Break</span>
+                            <div className="flex items-center gap-3">
+                                <span className="text-white font-medium text-base">
+                                    {localSettings.shortBreakTime} min
+                                </span>
+                                <ChevronDown
+                                    size={18}
+                                    strokeWidth={2.5}
+                                    color="rgba(255, 255, 255, 0.6)"
+                                    className="transition-transform duration-200"
+                                    style={{ transform: expandedRow === 'shortBreakTime' ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                                />
+                            </div>
+                        </div>
+                        {expandedRow === 'shortBreakTime' && renderScrollablePicker('shortBreakTime', localSettings.shortBreakTime, 'min')}
+                    </div>
+
+                    {/* Long Break */}
+                    <div className="mb-2">
+                        <div
+                            className="flex justify-between items-center py-4 px-4 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-white/5"
+                            onClick={() => setExpandedRow(expandedRow === 'longBreakTime' ? null : 'longBreakTime')}
+                        >
+                            <span className="text-white/70 text-base">Long Break</span>
+                            <div className="flex items-center gap-3">
+                                <span className="text-white font-medium text-base">
+                                    {localSettings.longBreakTime} min
+                                </span>
+                                <ChevronDown
+                                    size={18}
+                                    strokeWidth={2.5}
+                                    color="rgba(255, 255, 255, 0.6)"
+                                    className="transition-transform duration-200"
+                                    style={{ transform: expandedRow === 'longBreakTime' ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                                />
+                            </div>
+                        </div>
+                        {expandedRow === 'longBreakTime' && renderScrollablePicker('longBreakTime', localSettings.longBreakTime, 'min')}
+                    </div>
+
+                    {/* Sections/Intervals */}
+                    <div className="mb-2">
+                        <div
+                            className="flex justify-between items-center py-4 px-4 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-white/5"
+                            onClick={() => setExpandedRow(expandedRow === 'longBreakInterval' ? null : 'longBreakInterval')}
+                        >
+                            <span className="text-white/70 text-base">Long Break Interval</span>
+                            <div className="flex items-center gap-3">
+                                <span className="text-white font-medium text-base">
+                                    {localSettings.longBreakInterval}
+                                </span>
+                                <ChevronDown
+                                    size={18}
+                                    strokeWidth={2.5}
+                                    color="rgba(255, 255, 255, 0.6)"
+                                    className="transition-transform duration-200"
+                                    style={{ transform: expandedRow === 'longBreakInterval' ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                                />
+                            </div>
+                        </div>
+                        {expandedRow === 'longBreakInterval' && renderScrollablePicker('longBreakInterval', localSettings.longBreakInterval, 'sections')}
                     </div>
                 </div>
 
                 {/* Save Button */}
-                <button
-                    onClick={handleSave}
-                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3.5 px-8 rounded-full transition-all shadow-lg"
-                    style={{
-                        letterSpacing: '0.08em',
-                        boxShadow: '0 8px 24px rgba(59, 130, 246, 0.4)'
-                    }}
-                >
-                    SAVE
-                </button>
-
+                <div className="mt-6 pt-4 border-t border-white/10">
+                    <button
+                        onClick={handleSave}
+                        className="w-full py-3.5 rounded-2xl font-semibold text-base transition-all active:scale-95"
+                        style={{
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            color: 'white',
+                            boxShadow: '0 8px 20px rgba(102, 126, 234, 0.4)',
+                            letterSpacing: '0.5px'
+                        }}
+                    >
+                        SAVE CHANGES
+                    </button>
+                </div>
             </div>
         </div>
     );

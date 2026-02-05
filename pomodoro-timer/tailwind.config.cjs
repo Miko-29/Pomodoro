@@ -7,7 +7,8 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'],
+                sans: ['League Spartan', 'sans-serif'],
+                mono: ['Space Mono', 'monospace'],
             },
         },
     },

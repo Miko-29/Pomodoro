@@ -1,93 +1,98 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { usePomodoro, type Mode } from "./hooks/usePomodoro";
+import TimerDisplay from "./components/TimerDisplay";
+import ActionButtons from "./components/ActionButtons";
+import Settings from "./components/Settings";
 import "./index.css";
 
 export default function App() {
-	// --- 1. STATE WITH TYPES ---
+  const {
+    mode,
+    timeLeft,
+    isRunning,
+    sessionsCompleted,
+    settings,
+    toggleTimer,
+    resetTimer,
+    updateSettings,
+    getTotalTime
+  } = usePomodoro();
 
-	// We specify that mode can ONLY be 'work' or 'break'
-	const [mode, setMode] = useState<"work" | "break">("work");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-	// Time is a number
-	const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
+  // Background Logic
+  const getBackgroundClass = (m: Mode) => {
+    switch (m) {
+      case "focus": return "bg-focus";
+      case "shortBreak": return "bg-short-break";
+      case "longBreak": return "bg-long-break";
+      default: return "";
+    }
+  };
 
-	// isRunning is a boolean (true/false)
-	const [isRunning, setIsRunning] = useState<boolean>(false);
+  // Progress Color Logic (matching HTML purple)
+  const getProgressColorVar = (m: Mode) => {
+    switch (m) {
+      case "focus": return "#5B9FFE";
+      case "shortBreak": return "#7FD85C";
+      case "longBreak": return "#9d8df1"; // matching HTML var(--primary-purple)
+    }
+  };
 
-	// --- 2. TIMER LOGIC ---
-	useEffect(() => {
-		// We define the type for the interval ID
-		let interval: ReturnType<typeof setInterval>;
+  return (
+    <div className={`relative min-h-screen w-full overflow-hidden transition-all duration-1000 ${getBackgroundClass(mode)} bg-cover bg-center bg-no-repeat`}>
+      {/* Overlay matching HTML - brightness(0.6) contrast(1.1) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'rgba(0, 0, 0, 0.4)',
+          mixBlendMode: 'multiply'
+        }}
+      />
 
-		if (isRunning && timeLeft > 0) {
-			interval = setInterval(() => {
-				setTimeLeft((prevTime) => prevTime - 1);
-			}, 1000);
-		} else if (timeLeft === 0) {
-			setIsRunning(false);
-			alert("Time is up!");
-		}
+      {/* Main Content */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
 
-		// Cleanup function
-		return () => clearInterval(interval);
-	}, [isRunning, timeLeft]);
+        {/* Timer Card - exact HTML dimensions: 340x480 */}
+        <div
+          className="flex flex-col items-center justify-between"
+          style={{
+            width: '340px',
+            height: '480px',
+            background: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(25px) saturate(150%)',
+            WebkitBackdropFilter: 'blur(25px) saturate(150%)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '35px',
+            padding: '50px 30px 40px 30px',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.3)',
+            '--progress-color': getProgressColorVar(mode)
+          } as React.CSSProperties}
+        >
+          <TimerDisplay
+            timeLeft={timeLeft}
+            totalTime={getTotalTime()}
+            mode={mode}
+            sessionsCompleted={sessionsCompleted}
+            longBreakInterval={settings.longBreakInterval}
+          />
 
-	// --- 3. HELPER FUNCTIONS ---
+          <ActionButtons
+            isRunning={isRunning}
+            onToggle={toggleTimer}
+            onReset={resetTimer}
+            onSettings={() => setIsSettingsOpen(true)}
+            mode={mode}
+          />
+        </div>
+      </div>
 
-	// 'seconds' must be a number
-	const formatTime = (seconds: number): string => {
-		const minutes = Math.floor(seconds / 60);
-		const secs = seconds % 60;
-		return `${minutes < 10 ? "0" : ""}${minutes}:${secs < 10 ? "0" : ""}${secs}`;
-	};
-
-	const handleWorkMode = () => {
-		setMode("work");
-		setIsRunning(false);
-		setTimeLeft(25 * 60);
-	};
-
-	const handleBreakMode = () => {
-		setMode("break");
-		setIsRunning(false);
-		setTimeLeft(5 * 60);
-	};
-
-	const handleReset = () => {
-		setIsRunning(false);
-		if (mode === "work") {
-			setTimeLeft(25 * 60);
-		} else {
-			setTimeLeft(5 * 60);
-		}
-	};
-
-	// --- 4. THE VISUALS ---
-	return (
-		<div className="app-container">
-			<div className="timer-box">
-				<h1>{mode === "work" ? "Work Time" : "Break Time"}</h1>
-
-				<div className="timer-display">{formatTime(timeLeft)}</div>
-
-				<div className="buttons-row">
-					<button onClick={() => setIsRunning(!isRunning)} className={isRunning ? "stop-btn" : "start-btn"}>
-						{isRunning ? "Pause" : "Start"}
-					</button>
-
-					<button onClick={handleReset} className="reset-btn">
-						Reset
-					</button>
-				</div>
-
-				<div className="mode-buttons">
-					<button onClick={handleWorkMode} className={mode === "work" ? "active-mode" : ""}>
-						Work (25m)
-					</button>
-					<button onClick={handleBreakMode} className={mode === "break" ? "active-mode" : ""}>
-						Break (5m)
-					</button>
-				</div>
-			</div>
-		</div>
-	);
+      <Settings
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        settings={settings}
+        onUpdate={updateSettings}
+      />
+    </div>
+  );
 }

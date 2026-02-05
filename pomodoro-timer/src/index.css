@@ -1,93 +1,49 @@
-/* Reset basic settings */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
 body {
 	margin: 0;
-	font-family: "Arial", sans-serif;
-	background-color: #282c34;
-	color: white;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100vh; /* Full screen height */
+	padding: 0;
+	min-width: 320px;
+	min-height: 100vh;
 }
 
-/* The main card holding the timer */
-.timer-box {
-	background-color: #3e4452;
-	padding: 40px;
-	border-radius: 20px;
-	text-align: center;
-	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-	width: 300px;
+/* Background Gradients/Images */
+/* 
+    Ideally these reference the generated images. 
+    Using colors + gradients as reliable fallback.
+*/
+
+.bg-focus {
+	background-image: url('./assets/blue-bg.jpg');
 }
 
-h1 {
-	margin-top: 0;
-	font-size: 24px;
-	color: #61dafb; /* React Blue */
+.bg-short-break {
+	background-image: url('./assets/green-bg.jpg');
 }
 
-/* The big timer numbers */
-.timer-display {
-	font-size: 80px;
-	font-weight: bold;
-	margin: 20px 0;
-	font-variant-numeric: tabular-nums; /* Keeps numbers from jumping */
+.bg-long-break {
+	background-image: url('./assets/purple-bg.png');
 }
 
-/* Button Layouts */
-.buttons-row {
-	display: flex;
-	justify-content: center;
-	gap: 15px;
-	margin-bottom: 25px;
+/* Animations */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
-.mode-buttons {
-	border-top: 1px solid #5c6370;
-	padding-top: 20px;
-	display: flex;
-	justify-content: center;
-	gap: 10px;
-}
-
-/* General Button Styles */
-button {
-	cursor: pointer;
-	padding: 10px 20px;
-	border: none;
-	border-radius: 5px;
-	font-size: 16px;
-	font-weight: bold;
-	transition: transform 0.1s;
-}
-
-button:active {
-	transform: scale(0.95); /* Click effect */
-}
-
-/* Specific Button Colors */
-.start-btn {
-	background-color: #98c379;
-	color: #282c34;
-}
-
-.stop-btn {
-	background-color: #e06c75;
-	color: white;
-}
-
-.reset-btn {
-	background-color: #abb2bf;
-	color: #282c34;
-}
-
-.mode-buttons button {
-	background-color: transparent;
-	border: 2px solid #61dafb;
-	color: #61dafb;
-}
-
-.mode-buttons button.active-mode {
-	background-color: #61dafb;
-	color: #282c34;
+.animate-fade-in {
+	animation: fadeIn 0.3s ease-out forwards;
 }

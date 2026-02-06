@@ -1,14 +1,24 @@
-import { RotateCcw, Settings } from "lucide-react";
+import { RotateCcw, Settings, Square } from "lucide-react";
 
 interface ActionButtonsProps {
     isRunning: boolean;
+    hasSessionStarted: boolean;
     onToggle: () => void;
     onReset: () => void;
+    onStop: () => void;
     onSettings: () => void;
     mode: "focus" | "shortBreak" | "longBreak";
 }
 
-export default function ActionButtons({ isRunning, onToggle, onReset, onSettings, mode }: ActionButtonsProps) {
+export default function ActionButtons({
+    isRunning,
+    hasSessionStarted,
+    onToggle,
+    onReset,
+    onStop,
+    onSettings,
+    mode
+}: ActionButtonsProps) {
 
     // Dynamic button gradient based on mode
     const getButtonGradient = () => {
@@ -47,7 +57,7 @@ export default function ActionButtons({ isRunning, onToggle, onReset, onSettings
                 <RotateCcw size={20} strokeWidth={2} color="#fff" style={{ opacity: 0.8 }} />
             </button>
 
-            {/* Start/Pause Button - gradient with specific styling */}
+            {/* Start/Pause/Resume Button - gradient with specific styling */}
             <button
                 onClick={onToggle}
                 className="transition-all active:scale-[0.96]"
@@ -64,23 +74,41 @@ export default function ActionButtons({ isRunning, onToggle, onReset, onSettings
                     boxShadow: getButtonShadow()
                 }}
             >
-                {isRunning ? "PAUSE" : "START"}
+                {isRunning ? "PAUSE" : (hasSessionStarted ? "RESUME" : "START")}
             </button>
 
-            {/* Settings Button - 44px circle */}
-            <button
-                onClick={onSettings}
-                className="flex items-center justify-center rounded-full transition-all active:scale-95"
-                aria-label="Settings"
-                style={{
-                    width: '44px',
-                    height: '44px',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-            >
-                <Settings size={20} strokeWidth={2} color="#fff" style={{ opacity: 0.8 }} />
-            </button>
+            {/* Settings/Stop Button - 44px circle */}
+            {hasSessionStarted ? (
+                // Show Stop button when session has started
+                <button
+                    onClick={onStop}
+                    className="flex items-center justify-center rounded-full transition-all active:scale-95"
+                    aria-label="Stop"
+                    style={{
+                        width: '44px',
+                        height: '44px',
+                        background: 'rgba(239, 68, 68, 0.15)',
+                        border: '1px solid rgba(239, 68, 68, 0.3)'
+                    }}
+                >
+                    <Square size={18} strokeWidth={2} color="#ef4444" fill="#ef4444" />
+                </button>
+            ) : (
+                // Show Settings button when no session is active
+                <button
+                    onClick={onSettings}
+                    className="flex items-center justify-center rounded-full transition-all active:scale-95"
+                    aria-label="Settings"
+                    style={{
+                        width: '44px',
+                        height: '44px',
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)'
+                    }}
+                >
+                    <Settings size={20} strokeWidth={2} color="#fff" style={{ opacity: 0.8 }} />
+                </button>
+            )}
 
         </div>
     );

@@ -12,8 +12,10 @@ export default function App() {
     isRunning,
     sessionsCompleted,
     settings,
+    hasSessionStarted,
     toggleTimer,
     resetTimer,
+    stopSession,
     updateSettings,
     getTotalTime
   } = usePomodoro();
@@ -79,8 +81,10 @@ export default function App() {
 
           <ActionButtons
             isRunning={isRunning}
+            hasSessionStarted={hasSessionStarted}
             onToggle={toggleTimer}
             onReset={resetTimer}
+            onStop={stopSession}
             onSettings={() => setIsSettingsOpen(true)}
             mode={mode}
           />

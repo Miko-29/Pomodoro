@@ -32,7 +32,7 @@ export default function TimerDisplay({
         switch (mode) {
             case "focus": return "FOCUS";
             case "shortBreak": return "BREAK";
-            case "longBreak": return "BREAK";
+            case "longBreak": return "REST";
         }
     };
 

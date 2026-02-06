@@ -9,18 +9,49 @@ interface PomodoroSettings {
     longBreakInterval: number; // number of focus sessions before long break
 }
 
+const DEFAULT_SETTINGS: PomodoroSettings = {
+    focusTime: 25,
+    shortBreakTime: 5,
+    longBreakTime: 15,
+    longBreakInterval: 4,
+};
+
+// Load settings from localStorage
+const loadSettings = (): PomodoroSettings => {
+    try {
+        const stored = localStorage.getItem('pomodoroSettings');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            // Validate that all required fields exist and are numbers
+            if (parsed.focusTime && parsed.shortBreakTime && parsed.longBreakTime && parsed.longBreakInterval) {
+                return parsed;
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load settings:', error);
+    }
+    return DEFAULT_SETTINGS;
+};
+
+// Save settings to localStorage
+const saveSettings = (settings: PomodoroSettings) => {
+    try {
+        localStorage.setItem('pomodoroSettings', JSON.stringify(settings));
+    } catch (error) {
+        console.error('Failed to save settings:', error);
+    }
+};
+
 export const usePomodoro = () => {
+    // Load settings first before using them
+    const initialSettings = loadSettings();
+
     const [mode, setMode] = useState<Mode>("focus");
-    const [timeLeft, setTimeLeft] = useState(25 * 60);
     const [isRunning, setIsRunning] = useState(false);
     const [sessionsCompleted, setSessionsCompleted] = useState(0);
-
-    const [settings, setSettings] = useState<PomodoroSettings>({
-        focusTime: 25,
-        shortBreakTime: 5,
-        longBreakTime: 15,
-        longBreakInterval: 4,
-    });
+    const [hasSessionStarted, setHasSessionStarted] = useState(false);
+    const [settings, setSettings] = useState<PomodoroSettings>(initialSettings);
+    const [timeLeft, setTimeLeft] = useState(initialSettings.focusTime * 60);
 
     const getTotalTime = useCallback(() => {
         switch (mode) {
@@ -30,9 +61,8 @@ export const usePomodoro = () => {
         }
     }, [mode, settings]);
 
-    const switchMode = useCallback((newMode: Mode) => {
+    const switchMode = useCallback((newMode: Mode, autoStart: boolean = false) => {
         setMode(newMode);
-        setIsRunning(false);
         // Set time based on new mode
         let newTime;
         switch (newMode) {
@@ -41,6 +71,13 @@ export const usePomodoro = () => {
             case "longBreak": newTime = settings.longBreakTime * 60; break;
         }
         setTimeLeft(newTime);
+
+        // Auto-start if specified (for breaks)
+        if (autoStart) {
+            setIsRunning(true);
+        } else {
+            setIsRunning(false);
+        }
     }, [settings]);
 
     useEffect(() => {
@@ -50,40 +87,61 @@ export const usePomodoro = () => {
             interval = setInterval(() => {
                 setTimeLeft((prev) => prev - 1);
             }, 1000);
-        } else if (timeLeft === 0) {
-            setIsRunning(false);
-            // Handle Auto-Transitions
+        } else if (timeLeft === 0 && hasSessionStarted) {
+            // Auto-transition when timer reaches 0
             if (mode === "focus") {
                 const newCompleted = sessionsCompleted + 1;
                 setSessionsCompleted(newCompleted);
                 if (newCompleted % settings.longBreakInterval === 0) {
-                    switchMode("longBreak");
+                    switchMode("longBreak", true); // Auto-start long break
                 } else {
-                    switchMode("shortBreak");
+                    switchMode("shortBreak", true); // Auto-start short break
                 }
             } else {
-                // Break is over, back to focus
-                switchMode("focus");
+                // Break is over, back to focus (auto-start)
+                switchMode("focus", true);
             }
         }
 
         return () => clearInterval(interval);
-    }, [isRunning, timeLeft, mode, sessionsCompleted, settings, switchMode]);
+    }, [isRunning, timeLeft, mode, sessionsCompleted, settings, switchMode, hasSessionStarted]);
 
-    // If settings change, we might need to update current timer IF it wasn't running? 
-    // For simplicity, we only update if we reset or switch modes manually.
-    // Ideally, if user changes "Focus Time" while in Focus mode and paused, we update it?
-    // Let's keep it simple: Settings update effective on next reset or mode switch.
-
-    const toggleTimer = () => setIsRunning(!isRunning);
+    const toggleTimer = () => {
+        if (!hasSessionStarted) {
+            setHasSessionStarted(true);
+        }
+        setIsRunning(!isRunning);
+    };
 
     const resetTimer = () => {
         setIsRunning(false);
         setTimeLeft(getTotalTime());
     };
 
+    const stopSession = () => {
+        setIsRunning(false);
+        setHasSessionStarted(false);
+        setMode("focus");
+        setSessionsCompleted(0);
+        setTimeLeft(settings.focusTime * 60);
+    };
+
     const updateSettings = (newSettings: Partial<PomodoroSettings>) => {
-        setSettings(prev => ({ ...prev, ...newSettings }));
+        const updatedSettings = { ...settings, ...newSettings };
+        setSettings(updatedSettings);
+        saveSettings(updatedSettings); // Save to localStorage
+
+        // Update current timer if not in an active session
+        if (!hasSessionStarted && !isRunning) {
+            // Update time based on current mode
+            let newTime;
+            switch (mode) {
+                case "focus": newTime = updatedSettings.focusTime * 60; break;
+                case "shortBreak": newTime = updatedSettings.shortBreakTime * 60; break;
+                case "longBreak": newTime = updatedSettings.longBreakTime * 60; break;
+            }
+            setTimeLeft(newTime);
+        }
     };
 
     return {
@@ -92,8 +150,10 @@ export const usePomodoro = () => {
         isRunning,
         sessionsCompleted,
         settings,
+        hasSessionStarted,
         toggleTimer,
         resetTimer,
+        stopSession,
         switchMode,
         updateSettings,
         getTotalTime,

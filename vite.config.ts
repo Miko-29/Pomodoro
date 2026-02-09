@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/pomodoro-timer/', // Your repo name
+  base: '/Pomodoro/pomodoro-timer/', // Repo name only
 })

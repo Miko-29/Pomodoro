@@ -3,6 +3,7 @@ import { usePomodoro, type Mode } from "./hooks/usePomodoro";
 import TimerDisplay from "./components/TimerDisplay";
 import ActionButtons from "./components/ActionButtons";
 import Settings from "./components/Settings";
+import ConfirmStopModal from "./components/ConfirmStopModal";
 import "./index.css";
 
 export default function App() {
@@ -21,6 +22,16 @@ export default function App() {
   } = usePomodoro();
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isStopConfirmOpen, setIsStopConfirmOpen] = useState(false);
+
+  const handleStopClick = () => {
+    setIsStopConfirmOpen(true);
+  };
+
+  const handleConfirmStop = () => {
+    setIsStopConfirmOpen(false);
+    stopSession();
+  };
 
   // Background Logic
   const getBackgroundClass = (m: Mode) => {
@@ -84,7 +95,7 @@ export default function App() {
             hasSessionStarted={hasSessionStarted}
             onToggle={toggleTimer}
             onReset={resetTimer}
-            onStop={stopSession}
+            onStop={handleStopClick}
             onSettings={() => setIsSettingsOpen(true)}
             mode={mode}
           />
@@ -96,6 +107,12 @@ export default function App() {
         onClose={() => setIsSettingsOpen(false)}
         settings={settings}
         onUpdate={updateSettings}
+      />
+
+      <ConfirmStopModal
+        isOpen={isStopConfirmOpen}
+        onConfirm={handleConfirmStop}
+        onCancel={() => setIsStopConfirmOpen(false)}
       />
     </div>
   );

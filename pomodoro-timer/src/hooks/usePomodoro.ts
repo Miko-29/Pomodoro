@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
+import { showNotification, getNotificationMessage } from "../utils/notifications";
+import { playCompletionSound } from "../utils/sounds";
 
 export type Mode = "focus" | "shortBreak" | "longBreak";
 
@@ -7,6 +9,8 @@ interface PomodoroSettings {
     shortBreakTime: number; // in minutes
     longBreakTime: number; // in minutes
     longBreakInterval: number; // number of focus sessions before long break
+    notificationsEnabled: boolean;
+    soundEnabled: boolean; // New: sound toggle
 }
 
 const DEFAULT_SETTINGS: PomodoroSettings = {
@@ -14,6 +18,8 @@ const DEFAULT_SETTINGS: PomodoroSettings = {
     shortBreakTime: 5,
     longBreakTime: 15,
     longBreakInterval: 4,
+    notificationsEnabled: true,
+    soundEnabled: true,
 };
 
 // Load settings from localStorage
@@ -24,7 +30,12 @@ const loadSettings = (): PomodoroSettings => {
             const parsed = JSON.parse(stored);
             // Validate that all required fields exist and are numbers
             if (parsed.focusTime && parsed.shortBreakTime && parsed.longBreakTime && parsed.longBreakInterval) {
-                return parsed;
+                // Add notificationsEnabled if missing (for existing users)
+                return {
+                    ...parsed,
+                    notificationsEnabled: parsed.notificationsEnabled ?? true,
+                    soundEnabled: parsed.soundEnabled ?? true
+                };
             }
         }
     } catch (error) {
@@ -88,6 +99,17 @@ export const usePomodoro = () => {
                 setTimeLeft((prev) => prev - 1);
             }, 1000);
         } else if (timeLeft === 0 && hasSessionStarted) {
+            // Play sound for completed session
+            if (settings.soundEnabled) {
+                playCompletionSound();
+            }
+
+            // Send notification for completed session
+            if (settings.notificationsEnabled) {
+                const { title, body } = getNotificationMessage(mode);
+                showNotification(title, body);
+            }
+
             // Auto-transition when timer reaches 0
             if (mode === "focus") {
                 const newCompleted = sessionsCompleted + 1;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { usePomodoro, type Mode } from "./hooks/usePomodoro";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import TimerDisplay from "./components/TimerDisplay";
 import ActionButtons from "./components/ActionButtons";
 import Settings from "./components/Settings";
@@ -32,6 +33,18 @@ export default function App() {
     setIsStopConfirmOpen(false);
     stopSession();
   };
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    onToggle: toggleTimer,
+    onReset: resetTimer,
+    onStop: handleStopClick,
+    onEscapeSettings: () => setIsSettingsOpen(false),
+    onEscapeStopModal: () => setIsStopConfirmOpen(false),
+    isSettingsOpen,
+    isStopModalOpen: isStopConfirmOpen,
+    hasSessionStarted,
+  });
 
   // Background Logic
   const getBackgroundClass = (m: Mode) => {

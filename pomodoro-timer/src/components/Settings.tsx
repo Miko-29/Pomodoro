@@ -9,6 +9,8 @@ interface SettingsProps {
         shortBreakTime: number;
         longBreakTime: number;
         longBreakInterval: number;
+        notificationsEnabled: boolean;
+        soundEnabled: boolean;
     };
     onUpdate: (newSettings: any) => void;
 }
@@ -193,6 +195,76 @@ export default function Settings({ isOpen, onClose, settings, onUpdate }: Settin
                             </div>
                         </div>
                         {expandedRow === 'longBreakTime' && renderScrollablePicker('longBreakTime', localSettings.longBreakTime, 'min')}
+                    </div>
+
+                    {/* Notifications Toggle */}
+                    <div className="mb-2">
+                        <div
+                            className="flex justify-between items-center py-4 px-4 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-white/5"
+                            onClick={async () => {
+                                if (!localSettings.notificationsEnabled) {
+                                    // Request permission when enabling
+                                    const { requestNotificationPermission } = await import('../utils/notifications');
+                                    const granted = await requestNotificationPermission();
+                                    if (granted) {
+                                        setLocalSettings(prev => ({ ...prev, notificationsEnabled: true }));
+                                    }
+                                } else {
+                                    setLocalSettings(prev => ({ ...prev, notificationsEnabled: false }));
+                                }
+                            }}
+                        >
+                            <span className="text-white/70 text-base">Notifications</span>
+                            <div
+                                className="relative inline-flex items-center h-6 w-11 rounded-full transition-colors duration-200"
+                                style={{
+                                    background: localSettings.notificationsEnabled
+                                        ? 'linear-gradient(135deg, #10b981, #059669)'
+                                        : 'rgba(255, 255, 255, 0.2)'
+                                }}
+                            >
+                                <span
+                                    className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200"
+                                    style={{
+                                        transform: localSettings.notificationsEnabled ? 'translateX(26px)' : 'translateX(4px)'
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Sound Toggle */}
+                    <div className="mb-2">
+                        <div
+                            className="flex justify-between items-center py-4 px-4 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-white/5"
+                            onClick={async () => {
+                                const newValue = !localSettings.soundEnabled;
+                                setLocalSettings(prev => ({ ...prev, soundEnabled: newValue }));
+
+                                // Play test sound when enabling
+                                if (newValue) {
+                                    const { playCompletionSound } = await import('../utils/sounds');
+                                    playCompletionSound();
+                                }
+                            }}
+                        >
+                            <span className="text-white/70 text-base">Sound</span>
+                            <div
+                                className="relative inline-flex items-center h-6 w-11 rounded-full transition-colors duration-200"
+                                style={{
+                                    background: localSettings.soundEnabled
+                                        ? 'linear-gradient(135deg, #10b981, #059669)'
+                                        : 'rgba(255, 255, 255, 0.2)'
+                                }}
+                            >
+                                <span
+                                    className="inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200"
+                                    style={{
+                                        transform: localSettings.soundEnabled ? 'translateX(26px)' : 'translateX(4px)'
+                                    }}
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     {/* Sections/Intervals */}

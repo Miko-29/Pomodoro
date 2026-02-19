@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# 🍅 Pomodoro Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A beautiful, customizable Pomodoro timer to boost your productivity. Designed in Figma and built with modern web technologies.
 
-Currently, two official plugins are available:
+![Pomodoro Timer Preview](public/preview.png)
+<!-- You can add a screenshot here later! -->
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## React Compiler
+- **Customizable Intervals**: Set your preferred duration for Focus, Short Break, and Long Break sessions.
+- **Audio Feedback**: Pleasant notification sounds to alert you when a session ends.
+- **Visual Progress**: Circular progress indicator with a specialized conic gradient design.
+- **Glassmorphism UI**: Sleek, modern interface with transparency and blur effects.
+- **Responsive Design**: Works perfectly on desktop and mobile devices.
+- **Smart Transitions**: Automatically switches between modes based on your workflow.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+- **React 19**: For building the user interface.
+- **TypeScript**: For type-safe code and better developer experience.
+- **Vite**: For lightning-fast development and optimized production builds.
+- **Tailwind CSS**: For utility-first styling and rapid UI development.
+- **Lucide React**: For beautiful, consistent icons.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Make sure you have Node.js installed on your machine.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/pomodoro-timer.git
+    ```
+2.  Navigate to the project directory:
+    ```bash
+    cd pomodoro-timer
+    ```
+3.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+### Running the App
+
+Start the development server:
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) to view it in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Building for Production
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To create a production-ready build:
+
+```bash
+npm run build
 ```
+
+## 🎨 Design
+
+This project implements a custom design focused on clarity and aesthetics suitable for everyday use.
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).

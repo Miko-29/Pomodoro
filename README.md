@@ -2,8 +2,19 @@
 
 A beautiful, customizable Pomodoro timer to boost your productivity. Designed in Figma and built with modern web technologies.
 
-![Pomodoro Timer Preview](public/preview.png)
-<!-- You can add a screenshot here later! -->
+<div align="center">
+  <img src="public/pomodoro_focus.png" alt="Focus Mode" width="300" />
+  <img src="public/pomodoro_break.png" alt="Short Break Mode" width="300" />
+  <img src="public/pomodoro_rest.png" alt="Long Break Mode" width="300" />
+</div>
+
+<br/>
+
+<div align="center">
+  <h3>🎥 Watch the Demo</h3>
+  <video src="public/PomodoroAppDemo.mp4" controls width="80%"></video>
+  <br/>
+</div>
 
 ## ✨ Features
 
@@ -65,6 +76,3 @@ npm run build
 
 This project implements a custom design focused on clarity and aesthetics suitable for everyday use.
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).

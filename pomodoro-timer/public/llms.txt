@@ -1,0 +1,25 @@
+# Pomodoro Timer
+> A free, browser-based Pomodoro productivity timer.
+
+This is a free online Pomodoro technique timer. It helps users stay focused
+using 25-minute work sessions followed by short breaks. No account required.
+
+## Features
+- 25-minute Pomodoro work sessions
+- 5-minute short breaks
+- 15-minute long breaks after 4 sessions
+- Session counter
+- Clean, distraction-free interface
+- Works in any modern web browser
+
+## The Pomodoro Technique
+The Pomodoro Technique was created by Francesco Cirillo in the 1980s.
+It breaks work into focused 25-minute intervals separated by short breaks,
+improving concentration and reducing mental fatigue.
+
+## Access
+Live URL: https://miko-29.github.io/Pomodoro/
+Source: https://github.com/miko-29/Pomodoro
+Author: https://github.com/miko-29
+License: Open source
+Price: Free

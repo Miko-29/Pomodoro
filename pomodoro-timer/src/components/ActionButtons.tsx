@@ -46,7 +46,7 @@ export default function ActionButtons({
             <button
                 onClick={onReset}
                 className="flex items-center justify-center rounded-full transition-all active:scale-95"
-                aria-label="Reset"
+                aria-label="Reset Pomodoro timer"
                 style={{
                     width: '44px',
                     height: '44px',
@@ -60,6 +60,7 @@ export default function ActionButtons({
             {/* Start/Pause/Resume Button - gradient with specific styling */}
             <button
                 onClick={onToggle}
+                aria-label={isRunning ? "Pause Pomodoro timer" : (hasSessionStarted ? "Resume Pomodoro timer" : "Start Pomodoro timer")}
                 className="transition-all active:scale-[0.96]"
                 style={{
                     background: getButtonGradient(),
@@ -83,7 +84,7 @@ export default function ActionButtons({
                 <button
                     onClick={onStop}
                     className="flex items-center justify-center rounded-full transition-all active:scale-95"
-                    aria-label="Stop"
+                    aria-label="Stop Pomodoro timer"
                     style={{
                         width: '44px',
                         height: '44px',
@@ -98,7 +99,7 @@ export default function ActionButtons({
                 <button
                     onClick={onSettings}
                     className="flex items-center justify-center rounded-full transition-all active:scale-95"
-                    aria-label="Settings"
+                    aria-label="Open timer settings"
                     style={{
                         width: '44px',
                         height: '44px',

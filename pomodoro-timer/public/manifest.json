@@ -1,0 +1,15 @@
+{
+  "name": "Pomodoro Timer",
+  "short_name": "Pomodoro",
+  "description": "Free online Pomodoro timer. 25-minute focus sessions with short breaks.",
+  "start_url": "/Pomodoro/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#E53E3E",
+  "icons": [
+    { "src": "/Pomodoro/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/Pomodoro/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "categories": ["productivity", "utilities"],
+  "lang": "en"
+}

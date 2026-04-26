@@ -3,15 +3,209 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image" href="/Pomodoro/assets/favicon-CzqB32P5.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pomodoro-timer</title>
-  <script type="module" crossorigin src="/Pomodoro/assets/index-BiTYtqlY.js"></script>
-  <link rel="stylesheet" crossorigin href="/Pomodoro/assets/index-B7LceIgu.css">
+
+  <!-- Core SEO Meta Tags -->
+  <title>Pomodoro Timer — Free Online Focus & Productivity Timer</title>
+  <meta name="description" content="Free Pomodoro timer online. Use the Pomodoro Technique to boost focus with 25-minute work sessions and short breaks. No signup needed — start your timer now." />
+  <meta name="keywords" content="pomodoro timer, pomodoro, pomodoro technique, focus timer, 25 minute timer, productivity timer, online timer, free pomodoro timer, work timer, study timer, tomato timer" />
+  <meta name="author" content="miko-29" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://miko-29.github.io/Pomodoro/" />
+
+  <!-- Open Graph Tags -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://miko-29.github.io/Pomodoro/" />
+  <meta property="og:title" content="Pomodoro Timer — Free Online Focus Timer" />
+  <meta property="og:description" content="Boost your focus with the Pomodoro Technique. Free online timer — 25-minute sessions with short breaks. No signup required." />
+  <meta property="og:image" content="https://miko-29.github.io/Pomodoro/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Pomodoro Timer — Free Online Focus Timer" />
+  <meta property="og:site_name" content="Pomodoro Timer" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pomodoro Timer — Free Online Focus Timer" />
+  <meta name="twitter:description" content="Free Pomodoro timer. 25-minute focus sessions, short breaks, no signup." />
+  <meta name="twitter:image" content="https://miko-29.github.io/Pomodoro/og-image.png" />
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/Pomodoro/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/Pomodoro/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/Pomodoro/apple-touch-icon.png" />
+  <link rel="manifest" href="/Pomodoro/manifest.json" />
+  <meta name="theme-color" content="#E53E3E" />
+
+  <!-- Performance: Preconnect to font origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+
+  <!-- Schema.org Structured Data: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Pomodoro Timer",
+    "url": "https://miko-29.github.io/Pomodoro/",
+    "description": "A free online Pomodoro timer to boost focus and productivity using the Pomodoro Technique. Features 25-minute work sessions, short breaks, and long breaks.",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Web",
+    "browserRequirements": "Requires JavaScript",
+    "inLanguage": "en",
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "25-minute Pomodoro work sessions",
+      "5-minute short breaks",
+      "15-minute long breaks",
+      "Session tracking",
+      "No signup required"
+    ],
+    "screenshot": "https://miko-29.github.io/Pomodoro/og-image.png",
+    "author": {
+      "@type": "Person",
+      "name": "miko-29",
+      "url": "https://github.com/miko-29"
+    }
+  }
+  </script>
+
+  <!-- Schema.org Structured Data: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the Pomodoro Technique?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Pomodoro Technique is a time management method developed by Francesco Cirillo. It uses a timer to break work into 25-minute focused intervals (called 'pomodoros') separated by short 5-minute breaks. After four pomodoros, you take a longer 15-30 minute break."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long is a Pomodoro session?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A standard Pomodoro session is 25 minutes of focused work, followed by a 5-minute short break. After completing four Pomodoro sessions, you take a longer break of 15–30 minutes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this Pomodoro timer free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, this Pomodoro timer is completely free to use. No signup, no account, no download required. Just open the page and start your timer."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does the Pomodoro Technique really work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Research supports the Pomodoro Technique as effective for improving focus, reducing mental fatigue, and combating procrastination. Regular breaks help the brain consolidate information and maintain sustained attention over long work periods."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Schema.org Structured Data: BreadcrumbList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Pomodoro Timer",
+        "item": "https://miko-29.github.io/Pomodoro/"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Loading Skeleton Styles -->
+  <style>
+    #app-skeleton {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #1a1a2e;
+      color: white;
+      font-family: 'League Spartan', Georgia, serif;
+      gap: 1rem;
+    }
+    #app-skeleton .sk-title {
+      font-size: 1.5rem;
+      opacity: 0.6;
+    }
+    #app-skeleton .sk-timer {
+      font-size: 5rem;
+      font-weight: bold;
+      opacity: 0.15;
+      letter-spacing: 0.05em;
+    }
+  </style>
+  <script type="module" crossorigin src="/Pomodoro/assets/index-Bo21RkqV.js"></script>
+  <link rel="stylesheet" crossorigin href="/Pomodoro/assets/index-DuxayOPf.css">
 </head>
 
 <body>
-  <div id="root"></div>
+  <!-- noscript fallback: SEO-rich content for crawlers that don't execute JS -->
+  <noscript>
+    <div style="font-family:Georgia,serif;max-width:680px;margin:3rem auto;padding:0 1.5rem;color:#1a1a1a;line-height:1.7">
+      <h1>Pomodoro Timer — Free Online Focus Timer</h1>
+      <p>This is a free Pomodoro timer that helps you stay focused using the Pomodoro Technique — 25-minute work sessions followed by short breaks. No signup or download required.</p>
+      <h2>What is the Pomodoro Technique?</h2>
+      <p>Developed by Francesco Cirillo in the late 1980s, the Pomodoro Technique is a time management method that uses a timer to break work into 25-minute intervals called "pomodoros," separated by short breaks. After four pomodoros, you take a longer 15–30 minute break.</p>
+      <h2>How to Use This Timer</h2>
+      <ol>
+        <li>Click Start to begin a 25-minute Pomodoro session.</li>
+        <li>Work focused until the timer ends.</li>
+        <li>Take a 5-minute short break.</li>
+        <li>After 4 sessions, take a 15–30 minute long break.</li>
+      </ol>
+      <p><strong>Please enable JavaScript to use the interactive timer.</strong></p>
+    </div>
+  </noscript>
+
+  <!-- Loading Skeleton (visible until React mounts) -->
+  <div id="app-skeleton">
+    <div class="sk-title">Pomodoro Timer</div>
+    <div class="sk-timer">25:00</div>
+  </div>
+  <script>
+    // Remove skeleton once React app mounts
+    document.addEventListener('DOMContentLoaded', function() {
+      var skeleton = document.getElementById('app-skeleton');
+      if (skeleton) {
+        var observer = new MutationObserver(function() {
+          var appRoot = document.getElementById('root');
+          if (appRoot && appRoot.children.length > 0) {
+            skeleton.style.display = 'none';
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+    });
+  </script>
+
+  <!-- React App Root -->
+  <div id="root"></div>
 </body>
 
 </html>

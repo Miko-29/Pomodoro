@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Info } from "lucide-react";
 import { usePomodoro, type Mode } from "./hooks/usePomodoro";
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import TimerDisplay from "./components/TimerDisplay";
 import ActionButtons from "./components/ActionButtons";
 import Settings from "./components/Settings";
 import ConfirmStopModal from "./components/ConfirmStopModal";
+import SEOContent from "./components/SEOContent";
 import "./index.css";
 
 export default function App() {
@@ -24,6 +26,7 @@ export default function App() {
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isStopConfirmOpen, setIsStopConfirmOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const handleStopClick = () => {
     setIsStopConfirmOpen(true);
@@ -76,8 +79,20 @@ export default function App() {
         }}
       />
 
+      {/* Info Button — always visible, top-left corner */}
+      <button
+        className="info-button"
+        onClick={() => setIsInfoOpen(true)}
+        aria-label="About the Pomodoro Technique"
+      >
+        <Info size={20} strokeWidth={2} />
+      </button>
+
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4">
+
+        {/* SEO H1 — visually subtle, semantically critical */}
+        <h1 className="seo-h1">Pomodoro Timer</h1>
 
         {/* Timer Card - exact HTML dimensions: 340x480 */}
         <div
@@ -114,6 +129,12 @@ export default function App() {
           />
         </div>
       </div>
+
+      {/* SEO Info Modal */}
+      <SEOContent
+        isOpen={isInfoOpen}
+        onClose={() => setIsInfoOpen(false)}
+      />
 
       <Settings
         isOpen={isSettingsOpen}

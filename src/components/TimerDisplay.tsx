@@ -89,6 +89,9 @@ export default function TimerDisplay({
                     {/* Time - 54px, weight 300, letter-spacing -1px, Space Mono font */}
                     <div
                         className="font-mono"
+                        role="timer"
+                        aria-live="off"
+                        aria-label="Pomodoro countdown timer"
                         style={{
                             fontSize: '54px',
                             fontWeight: 300,

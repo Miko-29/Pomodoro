@@ -24,12 +24,13 @@ export default function SEOContent({ isOpen, onClose }: SEOContentProps) {
         </button>
 
         <section id="about" aria-label="About the Pomodoro Technique">
-          <h2>Free Online Pomodoro Timer</h2>
+          <h2>Free Aesthetic Pomodoro Timer</h2>
           <p>
-            This Pomodoro timer helps you work smarter using the{" "}
+            This simple, beautiful Pomodoro timer helps you work smarter using the{" "}
             <strong>Pomodoro Technique</strong> — a proven time management method
             that breaks work into focused 25-minute sessions separated by short
-            breaks. No signup, no download, no distractions.
+            breaks. No signup, no download, no distractions — just an aesthetic,
+            minimal focus timer that works.
           </p>
 
           <h3>How the Pomodoro Technique Works</h3>
